@@ -3,18 +3,20 @@
 <mapper namespace="com.core.gene.dao.mapper.UserMapper" >
   <resultMap id="BaseResultMap" type="com.core.gene.bean.User" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
     <result column="username" property="username" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="gender" property="gender" jdbcType="CHAR" />
     <result column="is_admin" property="isAdmin" jdbcType="CHAR" />
     <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    user.id, user.username, user.password, user.email, user.gender, user.is_admin, user.insert_time,user.telphone
+    id, username, password, email, gender, is_admin, insert_time,telephone,uid
   </sql>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, username, password, email, gender, is_admin, insert_time,telphone
+    select id,uid, username, password, email, gender, is_admin, insert_time,telephone
     from user
   </select>
   
@@ -31,11 +33,11 @@
   
 <!--   直接添加 -->
   <insert id="insert" parameterType="com.core.gene.bean.User" >
-    insert into user (id, username, password, 
-      email, gender, is_admin, insert_time,telphone
+    insert into user (id,uid, username, password, 
+      email, gender, is_admin, insert_time,telephone
       )
-    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{isAdmin,jdbcType=CHAR}, #{insertTime,jdbcType=TIMESTAMP},#{telphone,jdbcType=VARCHAR}
+    values (#{id,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},  #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{isAdmin,jdbcType=CHAR}, #{insertTime,jdbcType=TIMESTAMP},#{telephone,jdbcType=VARCHAR}
       )
   </insert>
 <!--   添加，空值不写入database -->
@@ -44,6 +46,9 @@
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="uid != null" >
+        uid,
       </if>
       <if test="username != null" >
         username,
@@ -63,13 +68,16 @@
       <if test="insertTime != null" >
         insert_time,
       </if>
-       <if test="telphone != null" >
-        telphone,
+       <if test="telephone != null" >
+        telephone,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="username != null" >
         #{username,jdbcType=VARCHAR},
@@ -89,8 +97,8 @@
       <if test="insertTime != null" >
         #{insertTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="telphone != null" >
-        #{telphone,jdbcType=VARCHAR},
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -115,8 +123,8 @@
       <if test="insertTime != null" >
         insert_time = #{insertTime,jdbcType=TIMESTAMP},
       </if>
-       <if test="telphone != null" >
-        telphone= #{telphone,jdbcType=VARCHAR},
+       <if test="telephone != null" >
+        telephone= #{telephone,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -129,7 +137,7 @@
       gender = #{gender,jdbcType=CHAR},
       is_admin = #{isAdmin,jdbcType=CHAR},
       insert_time = #{insertTime,jdbcType=TIMESTAMP},
-      telphone = #{telphone,jdbcType=VARCHAR}
+      telephone = #{telephone,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   
@@ -158,8 +166,8 @@
 		      <if test="record.isAdmin != null" >
 		        and is_admin = #{record.isAdmin,jdbcType=CHAR},
 		      </if>
-		      <if test="record.telphone != null" >
-		        and telphone = #{record.telphone,jdbcType=VARCHAR},
+		      <if test="record.telephone != null" >
+		        and telephone = #{record.telephone,jdbcType=VARCHAR},
 		      </if>
     	</where>
     	limit #{startPage},#{pageSize}
@@ -184,8 +192,8 @@
 		      <if test="isAdmin != null" >
 		        and is_admin = #{isAdmin,jdbcType=CHAR},
 		      </if>
-		       <if test="telphone != null" >
-		        and telphone = #{telphone,jdbcType=VARCHAR},
+		       <if test="telephone != null" >
+		        and telephone = #{telephone,jdbcType=VARCHAR},
 		      </if>
     	</where>
   </select>

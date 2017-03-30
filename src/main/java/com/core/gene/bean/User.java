@@ -10,6 +10,8 @@ public class User  implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+	
+	private Long uid;
 
     private String username;
 
@@ -23,7 +25,7 @@ public class User  implements Serializable{
 
     private Date insertTime;
 
-    private String telphone;
+    private String telephone;
     
     
     public Long getId() {
@@ -82,12 +84,21 @@ public class User  implements Serializable{
         this.insertTime = insertTime;
     }
 
-	public String getTelphone() {
-		return telphone;
+	public Long getUid() {
+		return uid;
 	}
 
-	public void setTelphone(String telphone) {
-		this.telphone = telphone;
+	public void setUid(Long uid) {
+		this.uid = uid;
 	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
     
 }

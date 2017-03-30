@@ -23,7 +23,7 @@ public class SMSUtil{
        private static String appSecret="57aa1e5a126e6d3dd247479af2b0bc58";
        private static String url=" https://eco.taobao.com/router/rest";
        
-       public static void sentSmsCode(String smsFreeSignName,String smsCode,String recNum,String smsTemplateCode) throws ApiException{
+       public static String sentSmsCode(String smsFreeSignName,String smsCode,String recNum,String smsTemplateCode) throws ApiException{
     	   TaobaoClient client=new DefaultTaobaoClient(url,appkey,appSecret);
     	   AlibabaAliqinFcSmsNumSendRequest req=new AlibabaAliqinFcSmsNumSendRequest();
     	   req.setExtend("");
@@ -35,8 +35,7 @@ public class SMSUtil{
     	   req.setSmsTemplateCode(smsTemplateCode);
     	   AlibabaAliqinFcSmsNumSendResponse rsp=client.execute(req);	
     	   System.out.print(rsp.getBody());
-    	   
-    	   
+    	   return rsp.getBody();
        }
   
 }
