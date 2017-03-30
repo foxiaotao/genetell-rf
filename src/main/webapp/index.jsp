@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ include file="./View/include/include.jsp"%> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>注册</title>
+	<title>管理员注册</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description" content="" />
 	<meta name="keywords" content="" />
@@ -81,29 +82,29 @@
 					<div class="row row-mt-15em">
 						<div class="col-md-6 mt-text animate-box" data-animate-effect="fadeInUp">
 							
-							<h1>æ¬¢è¿æ³¨åæä¸ºåºå è¯´ç®¡çå.</h1>	
+							<h1>欢迎注册成为基因说管理员.</h1>	
 						</div>
 						<div class="col-md-5 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
 							<div class="form-wrap">
 								<div class="tab">
 									<ul class="tab-menu">
-										<li class="active gtco-first"><a href="#" data-tab="signup">æ³¨å</a></li>
-										<li class="gtco-second"><a href="#" data-tab="login">ç»å½</a></li>
+										<li class="active gtco-first"><a href="#" data-tab="signup">注册</a></li>
+										<li class="gtco-second"><a href="#" data-tab="login">登录</a></li>
 									</ul>
 									<div class="tab-content">
 										<div class="tab-content-inner active" data-content="signup">
 											<form action="#">
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="username">ç¨æ·å</label>
+														<label for="username">用户名</label>
 														<input type="text" class="form-control" id="username" 
-														 onblur="checkname()" placeholder="ç¨æ·åç±è±æå­æ¯åæ°å­ç»æç6-16ä½å­ç¬¦ç»æ">
+														 onblur="checkname()" placeholder="用户名由英文字母和数字组成的6-16位字符组成">
 														<div id="uname"></div>
 													</div>
 												</div>
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="password">å¯ç </label>
+														<label for="password">密码</label>
 														<input type="password" id="password" name="pwd" class="form-control" 
 														tabindex="2" onblur="checkuserpassword()"/>
 														<div id="upassword"></div>
@@ -112,25 +113,25 @@
 												</div>
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="password2">åæ¬¡è¾å¥ç¡®è®¤å¯ç </label>
-														<input type="password" class="form-control" id="txtpwdagin" placeholder="ä¸¤æ¬¡å¯ç è¾å¥å¿é¡»ä¸è´" onblur="checkpwdagin()">
+														<label for="password2">再次输入确认密码</label>
+														<input type="password" class="form-control" id="txtpwdagin" placeholder="两次密码输入必须一致" onblur="checkpwdagin()">
 														<div id="pwdagin"></div>
 													</div>
 												</div>
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="password2">è¾å¥ææºå·</label>
-														<input type="text" class="form-control" id="txttelephone" placeholder="è¯·è¾å¥çå®ææºå·ä»¥ä¾¿æ¥æ¶éªè¯ç " onblur="checktelephone()">
+														<label for="password2">输入手机号</label>
+														<input type="text" class="form-control" id="txttelephone" placeholder="请输入真实手机号以便接收验证码" onblur="checktelephone()">
 														<div id="telephone"></div>
 													</div>
 												</div>
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="username">è¾å¥éªè¯ç </label>
+														<label for="username">输入验证码</label>
 														<table>
 															<tr>
 														    <td> <input type="text" class="form-control" id="ecode" ></td>
-														    <td style="padding-left: 20px;"> <input type="submit" class="btn btn-primary" value="åééªè¯ç "></td>
+														    <td style="padding-left: 20px;"> <input type="submit" class="btn btn-primary" value="发送验证码"></td>
 															</tr>
 															
 														</table>
@@ -140,7 +141,7 @@
 
 												<div class="row form-group">
 													<div class="col-md-12">
-														<input type="submit" class="btn btn-primary" value="æ³¨å">
+														<input type="submit" class="btn btn-primary" value="注册">
 													</div>
 												</div>
 											</form>	
@@ -150,21 +151,21 @@
 											<form action="#">
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="username">ç¨æ·å</label>
+														<label for="username">用户名</label>
 														<input type="text" class="form-control" id="username" onblur="checkname()">
 														<div id="uname"></div>
 													</div>
 												</div>
 												<div class="row form-group">
 													<div class="col-md-12">
-														<label for="password">å¯ç </label>
+														<label for="password">密码</label>
 														<input type="password" class="form-control" id="password">
 													</div>
 												</div>
 
 												<div class="row form-group">
 													<div class="col-md-12">
-														<input type="submit" class="btn btn-primary" value="ç»å½">
+														<input type="submit" class="btn btn-primary" value="登录">
 													</div>
 												</div>
 											</form>	
