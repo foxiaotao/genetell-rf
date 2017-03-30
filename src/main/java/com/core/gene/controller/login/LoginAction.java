@@ -61,13 +61,17 @@ public class LoginAction {
     			SessionsUser users = new SessionsUser();
     			BeanUtils.copyProperties(users, loginUser.get(0));
     			sessionProvider.setAttribute(request, response, "SESSIONSUSER",(Serializable) users);
-    			//登陆成功
-    			return new ResponseEntity(new ReturnBean("登陆成功",true), HttpStatus.OK);
+    			//登陆成功(重定向)
+    			String contextPath = request.getServletContext().getContextPath();
+    			response.sendRedirect(contextPath+"/View/welcome.jsp"); 
+//    			return new ResponseEntity(new ReturnBean("登陆成功",true), HttpStatus.OK);
+    			return null;
     		}else{
     			//登陆失败
     			return new ResponseEntity(new ReturnBean("用户名密码错误",false), HttpStatus.OK);
     		}
     	}
+    	
     } 
     
     
