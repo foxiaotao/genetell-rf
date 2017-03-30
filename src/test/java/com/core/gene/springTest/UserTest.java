@@ -26,8 +26,8 @@ public class UserTest extends JunitSpringTest{
 	
 	@Test
 	public void indextest(){
-		
-		List<User> list = userServiceImpl.selectPageByEntity(new User(), 0, 10);
+		//我update	
+ 		List<User> list = userServiceImpl.selectPageByEntity(new User(), 0, 10);
 		System.out.println(list.size());
 	}
 	
