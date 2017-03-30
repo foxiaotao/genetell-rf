@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.core.gene.dao.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.core.gene.bean.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="is_admin" property="isAdmin" jdbcType="CHAR" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user.id, user.username, user.password, user.email, user.gender, user.is_admin, user.insert_time,user.telphone
+  </sql>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, username, password, email, gender, is_admin, insert_time,telphone
+    from user
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+<!--   直接添加 -->
+  <insert id="insert" parameterType="com.core.gene.bean.User" >
+    insert into user (id, username, password, 
+      email, gender, is_admin, insert_time,telphone
+      )
+    values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{gender,jdbcType=CHAR}, #{isAdmin,jdbcType=CHAR}, #{insertTime,jdbcType=TIMESTAMP},#{telphone,jdbcType=VARCHAR}
+      )
+  </insert>
+<!--   添加，空值不写入database -->
+  <insert id="insertSelective" parameterType="com.core.gene.bean.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="username != null" >
+        username,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="isAdmin != null" >
+        is_admin,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+       <if test="telphone != null" >
+        telphone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="isAdmin != null" >
+        #{isAdmin,jdbcType=CHAR},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.core.gene.bean.User" >
+    update user
+    <set >
+      <if test="username != null" >
+        username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="isAdmin != null" >
+        is_admin = #{isAdmin,jdbcType=CHAR},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="telphone != null" >
+        telphone= #{telphone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.core.gene.bean.User" >
+    update user
+     set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=CHAR},
+      is_admin = #{isAdmin,jdbcType=CHAR},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      telphone = #{telphone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 自定义 -->
+  <select id="getUserByUsername" parameterType="string" resultMap="BaseResultMap">
+  		select * from user where username = #{username}
+  </select>
+  
+  <select id="selectPageByUser" resultMap="BaseResultMap" parameterType="map" >
+  		select  
+  		<include refid="Base_Column_List" />
+    	from user
+    	<where>
+    		  <if test="record.id != null" >
+		        and id = #{record.id,jdbcType=BIGINT},
+		      </if>
+		      <if test="record.username != null" >
+		        and username = #{record.username,jdbcType=VARCHAR},
+		      </if>
+		      <if test="record.email != null" >
+		        and email = #{record.email,jdbcType=VARCHAR},
+		      </if>
+		      <if test="record.gender != null" >
+		        and gender = #{record.gender,jdbcType=CHAR},
+		      </if>
+		      <if test="record.isAdmin != null" >
+		        and is_admin = #{record.isAdmin,jdbcType=CHAR},
+		      </if>
+		      <if test="record.telphone != null" >
+		        and telphone = #{record.telphone,jdbcType=VARCHAR},
+		      </if>
+    	</where>
+    	limit #{startPage},#{pageSize}
+  </select>
+  
+<!--   条件查询总数  用以分页 取总页数  和selectPageByUser 配合使用-->
+  <select id="countByEntity" resultType="int" parameterType="com.core.gene.bean.User" >
+  		select count(1) from user
+    	<where>
+    		  <if test="id != null" >
+		        and id = #{id,jdbcType=BIGINT},
+		      </if>
+		      <if test="username != null" >
+		        and username = #{username,jdbcType=VARCHAR},
+		      </if>
+		      <if test="email != null" >
+		        and email = #{email,jdbcType=VARCHAR},
+		      </if>
+		      <if test="gender != null" >
+		        and gender = #{gender,jdbcType=CHAR},
+		      </if>
+		      <if test="isAdmin != null" >
+		        and is_admin = #{isAdmin,jdbcType=CHAR},
+		      </if>
+		       <if test="telphone != null" >
+		        and telphone = #{telphone,jdbcType=VARCHAR},
+		      </if>
+    	</where>
+  </select>
+  
+</mapper>
