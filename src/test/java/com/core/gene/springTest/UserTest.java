@@ -21,8 +21,6 @@ public class UserTest extends JunitSpringTest{
 	@Autowired
     UserService userServiceImpl;
 	
-	@Autowired
-    UserAction userController;
 	
 	@Test
 	public void indextest(){

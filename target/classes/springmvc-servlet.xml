@@ -20,7 +20,8 @@
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass"
             value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/view/" />
+<!--             跳转的配置  跳转到什么地方 -->
+        <property name="prefix" value="/View/" />
         <property name="suffix" value=".jsp" />
     </bean>
     
