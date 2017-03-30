@@ -25,17 +25,26 @@ public class AdminUserInterceptor implements HandlerInterceptor {
 	private SessionProvider sessionProvider;
 	
 	@Override
-	public void afterCompletion(HttpServletRequest arg0,
-			HttpServletResponse arg1, Object arg2, Exception arg3)
+	public void afterCompletion(HttpServletRequest request,
+			HttpServletResponse response, Object arg2, Exception exception)
 			throws Exception {
-		// TODO Auto-generated method stub
-		
+		if(exception!=null){
+			logger.error(exception.getMessage());
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType("application/json;charset=UTF-8");
+			Map obj = new HashMap(0);
+			obj.put("success", false);
+			obj.put("msg", exception.getMessage());
+			PrintWriter out = response.getWriter();
+			out.append(obj.toString());
+			out.flush();
+			out.close();
+		}
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1,
 			Object arg2, ModelAndView arg3) throws Exception {
-		// TODO Auto-generated method stub
 		
 	}
 

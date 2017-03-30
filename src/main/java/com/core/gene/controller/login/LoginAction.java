@@ -43,6 +43,7 @@ public class LoginAction {
     	// 是否需要 密码在数据库 密文报错（insert时候将密码md5加密  登陆时将页面密码加密 在和数据库比较）
     	//根据用户名去查询出这个user，在对user进行判断,如果user为空，大于一，没有时各是什么情况
     	//只有一个时，那就根据密码判断（看查询出来的用户密码是不是和登陆的密码一致）
+    	//username 可以是username，telephone，email
     	List<User> loginUser = userServiceImpl.getUserByUsername(record.getUsername());
     	
     	//这里不将username 和password 一同传入 xml  查询是否有  usernmae= 123 and password = 11，而是通过用户名把user查出来，先判断这个username 有多少个 ，正常 只有一个

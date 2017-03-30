@@ -2,6 +2,7 @@ package com.core.gene.controller.register;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +53,12 @@ public class RegisterAction {
     		//手机号码 正则匹配 验证
     		return new ResponseEntity(new ReturnBean("请输入正确的手机号码注册", false), HttpStatus.OK);
     	}
-    	
+    	//验证有无注册过
+    	List<User> list = userServiceImpl.getUserByUsername(record.getTelephone());
+    	if(list.size()>0){
+    		logger.error("【获取短信验证码】该手机号码已注册");
+    		return new ResponseEntity(new ReturnBean("该手机号码已注册", false), HttpStatus.OK);
+    	}
     	
     	//同一个ip，用不同号码 无限 请求发送 ??? 怎么办
     	
@@ -72,34 +78,34 @@ public class RegisterAction {
     			return new ResponseEntity(new ReturnBean("60秒内不可重复发送短信验证码", false), HttpStatus.OK);
     		}else if(diff < 600){
     			//同一个手机号码在10分钟之内不能连续发送，如果该手机号码在10min之内发送过短信验证码，那么久不在生成新的短信验证码，用之前的短信验证码，用cellphone作为key，保存在session中
-    			Serializable code = sessionProvider.getAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()));
-    			if(code==null){
+    			Serializable _code = sessionProvider.getAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()));
+    			if(_code==null){
     				//考虑session中code丢失的情况
-    				code = StringUtil.randomNumber(6);
+    				_code = StringUtil.randomNumber(6);
     			}
-    			logger.error("【获取短信验证码】10分钟内发送相同短信验证码，code="+code+",（单位:秒）timeDiff="+diff);
-    			sentSmsCodeResult = SMSUtil.sentSmsCode("小涛测试", code.toString(), record.getTelephone(), "SMS_58600016");
+    			logger.error("【获取短信验证码】10分钟内发送相同短信验证码，code="+_code+",（单位:秒）timeDiff="+diff);
+    			sentSmsCodeResult = SMSUtil.sentSmsCode(GeneConstant.smsFreeSignName, _code.toString(), record.getTelephone(), GeneConstant.smsTemplateCode);
     			//更新缓存中 入缓存时间，以便下次进入获取 比较时间
     			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionRegDateKey(record.getTelephone()),new Date());
-    			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),record.getTelephone());
+    			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),_code);
     			
     		}else if(diff >= 600){
     			//短信发送(超过10min )重新发送
     			String _code = StringUtil.randomNumber(6);
     			logger.error("【获取短信验证码】超过10分钟，重新生成随机短信验证码，code="+_code+",（单位:秒）timeDiff="+diff);
-            	sentSmsCodeResult = SMSUtil.sentSmsCode("小涛测试", _code , record.getTelephone(), "SMS_58600016");
+            	sentSmsCodeResult = SMSUtil.sentSmsCode(GeneConstant.smsFreeSignName, _code , record.getTelephone(), GeneConstant.smsTemplateCode);
             	//更新缓存中 入缓存时间，以便下次进入获取 比较时间
     			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionRegDateKey(record.getTelephone()),new Date());
-    			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),record.getTelephone());
+    			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),_code);
     		}
     	}else{
     		String _code = StringUtil.randomNumber(6);
     		logger.error("【获取短信验证码】用户首次获取短信验证码，code="+_code);
     		//短信发送
-        	sentSmsCodeResult = SMSUtil.sentSmsCode("小涛测试", _code , record.getTelephone(), "SMS_58600016");
+        	sentSmsCodeResult = SMSUtil.sentSmsCode(GeneConstant.smsFreeSignName, _code , record.getTelephone(), GeneConstant.smsTemplateCode);
         	//更新缓存中 入缓存时间，以便下次进入获取 比较时间
 			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionRegDateKey(record.getTelephone()),new Date());
-			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),record.getTelephone());
+			sessionProvider.setAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()),_code);
     	}
     	SmsResponse smsResponse = getSmsResponse(sentSmsCodeResult);
     	//将sentSmsCodeResult（json串）转成对象，验证sentSmsCodeResult 中的success是否成功，成功则告诉前台已发送
@@ -176,16 +182,25 @@ public class RegisterAction {
     		//code 页面提交的code
     		return new ResponseEntity(new ReturnBean("短信验证码不能为空", false), HttpStatus.OK);
     	}
+    	//验证有无注册过
+    	List<User> list = userServiceImpl.getUserByUsername(record.getTelephone());
+    	if(list.size()>0){
+    		return new ResponseEntity(new ReturnBean("该手机号码已注册", false), HttpStatus.OK);
+    	}
     	//缓存中的code
 		Serializable codeSession = sessionProvider.getAttribute(request, response,GeneConstant.getCellphoneSessionContentKey(record.getTelephone()) );
 
 		if(code.equals(codeSession)){
 			record.setInsertTime(new Date());
 	        userServiceImpl.insert(record);
+	        String contextPath = request.getServletContext().getContextPath();
+			response.sendRedirect(contextPath+"/View/login.jsp?telephone="+record.getTelephone()+"&password="+record.getPassword()); 
+//			return new ResponseEntity(new ReturnBean("登陆成功",true), HttpStatus.OK);
+			return null;
 		}else{
 			return new ResponseEntity(new ReturnBean("短信验证码错误", false), HttpStatus.OK);
 		}
         
-        return new ResponseEntity(new ReturnBean("注册成功", true), HttpStatus.OK);
+//      return new ResponseEntity(new ReturnBean("注册成功", true), HttpStatus.OK);
     }
 }

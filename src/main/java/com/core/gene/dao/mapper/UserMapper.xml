@@ -143,7 +143,10 @@
   
   <!-- 自定义 -->
   <select id="getUserByUsername" parameterType="string" resultMap="BaseResultMap">
-  		select * from user where username = #{username}
+  		select * from user 
+  		where username = #{username} 
+  		or telephone = #{username} 
+  		or email= #{username}
   </select>
   
   <select id="selectPageByUser" resultMap="BaseResultMap" parameterType="map" >
